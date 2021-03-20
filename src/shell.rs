@@ -4,9 +4,7 @@ pub fn get_stdout(cmd: &str, arg: &str) -> String {
     let output = Command::new(cmd)
         .arg(arg)
         .output()
-        .unwrap_or_else(|e| {
-            panic!("Failed to execute process: {}", e)
-        });
+        .expect("Failed to execute process");
 
     if output.status.success() {
         String::from_utf8_lossy(&output.stdout).to_string()
