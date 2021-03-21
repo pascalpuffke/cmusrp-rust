@@ -25,6 +25,20 @@ struct Arguments {
         help = "Polling interval in which the program grabs the current status, in milliseconds"
     )]
     interval: u64,
+    #[structopt(
+        short,
+        long = "top",
+        default_value = "{title}",
+        help = "Sets custom formatting for the top string"
+    )]
+    top_format: String,
+    #[structopt(
+        short,
+        long = "bottom",
+        default_value = "{artist} - {album} ({date})",
+        help = "Sets custom formatting for the bottom string"
+    )]
+    bottom_format: String,
 }
 
 const ID: u64 = 718109162923360327;
@@ -47,25 +61,17 @@ fn main_loop(mut client: Client, args_struct: Arguments) {
         let remote = shell::get_stdout("cmus-remote", "-Q").unwrap_or(String::new());
 
         if parser::is_playing(&remote) {
-            let (artist, title, album, date) = (
-                get_tag(Tag::Artist, &remote),
-                get_tag(Tag::Title, &remote),
-                get_tag(Tag::Album, &remote),
-                get_tag(Tag::Date, &remote),
+            let (top, bottom) = (
+                replace_format(&args_struct.top_format, &remote),
+                replace_format(&args_struct.bottom_format, &remote),
             );
 
             if args_struct.debug {
-                println!("{}\n{} - {} ({})\n", title, artist, album, date);
+                println!("{}\n{}", top, bottom);
             } else {
-                let state = if parser::is_tagged(&remote) {
-                    format!("{} - {} ({})", artist, album, date)
-                } else {
-                    String::new()
-                };
-
                 client
                     .set_activity(|activity| {
-                        activity.state(state).details(title).assets(|asset| {
+                        activity.state(bottom).details(top).assets(|asset| {
                             asset
                                 .large_image("icon")
                                 .large_text(format!("version {}", VERSION))
@@ -80,6 +86,14 @@ fn main_loop(mut client: Client, args_struct: Arguments) {
 
         sleep(Duration::from_millis(args_struct.interval));
     }
+}
+
+fn replace_format(format_string: &str, remote: &String) -> String {
+    format_string
+        .replace("{artist}", get_tag(Tag::Artist, &remote).as_str())
+        .replace("{title}", get_tag(Tag::Title, &remote).as_str())
+        .replace("{album}", get_tag(Tag::Album, &remote).as_str())
+        .replace("{date}", get_tag(Tag::Date, &remote).as_str())
 }
 
 // basically just to get rid of repeated unwrapping in main method
