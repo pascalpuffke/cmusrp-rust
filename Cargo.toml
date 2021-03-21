@@ -1,6 +1,6 @@
 [package]
 name = "crp-rust"
-version = "1.1.0"
+version = "1.2.0"
 authors = ["Pascal Puffke"]
 edition = "2018"
 license = "GNU GPLv3"
@@ -12,3 +12,4 @@ categories = ["command-line-utilities"]
 [dependencies]
 discord-rpc-client = "0.3.0"
 clap = "2.33.3"
+structopt = "0.3.21"
