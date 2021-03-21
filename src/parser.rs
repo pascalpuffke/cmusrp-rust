@@ -28,13 +28,16 @@ impl Tag {
         // getting proper string to later search for based on the Tag enum
         let tag_formatted = format!("tag {} ", tag.to_string());
 
-        for line in remote.lines() {
-            if line.starts_with(tag_formatted.as_str()) {
-                return Some(line[tag_formatted.len()..].to_string());
-            }
-        }
+        let results: Vec<&str> = remote
+            .lines()
+            .filter(|line| line.starts_with(tag_formatted.as_str()))
+            .collect();
 
-        None
+        if results.len() > 0 {
+            Some(results.get(0).unwrap()[tag_formatted.len()..].to_string())
+        } else {
+            None
+        }
     }
 }
 
