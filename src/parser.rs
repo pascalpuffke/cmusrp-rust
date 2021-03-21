@@ -28,17 +28,33 @@ impl Tag {
         // getting proper string to later search for based on the Tag enum
         let tag_formatted = format!("tag {} ", tag.to_string());
 
-        let results: Vec<&str> = remote
-            .lines()
-            .filter(|line| line.starts_with(tag_formatted.as_str()))
-            .collect();
+        if is_tagged(remote) {
+            let result: String = remote
+                .lines()
+                .filter(|line| line.starts_with(tag_formatted.as_str()))
+                .take(1)
+                .collect();
 
-        if results.len() > 0 {
-            Some(results.get(0).unwrap()[tag_formatted.len()..].to_string())
+            return Some(result[tag_formatted.len()..].to_string());
         } else {
-            None
+            if tag.to_string().eq("title") {
+                // return only the title tag based on file name
+                let line: String = remote
+                    .lines()
+                    .filter(|line| line.starts_with("file "))
+                    .take(1)
+                    .collect();
+
+                return Some(line[5..].to_string());
+            }
         }
+
+        None
     }
+}
+
+pub fn is_tagged(remote: &str) -> bool {
+    remote.contains("tag title")
 }
 
 pub fn is_playing(remote: &str) -> bool {

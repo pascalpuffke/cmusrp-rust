@@ -1,13 +1,12 @@
 [package]
 name = "crp-rust"
 version = "1.2.0"
-authors = ["Pascal Puffke"]
+authors = ["Pascal Puffke <pascal@pascalpuffke.de>"]
 edition = "2018"
-license = "GNU GPLv3"
+license = "GPL-3.0-or-later"
+license-file = "LICENSE"
 repository = "https://github.com/MineClashTV/cmusrp-rust"
 categories = ["command-line-utilities"]
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 discord-rpc-client = "0.3.0"

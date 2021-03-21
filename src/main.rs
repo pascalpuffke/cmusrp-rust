@@ -32,7 +32,6 @@ const VERSION: &str = "1.2.0";
 
 fn main() {
     let args = Arguments::from_args();
-
     let mut client = Client::new(ID);
 
     // only start client if debug is disabled
@@ -58,16 +57,19 @@ fn main_loop(mut client: Client, args_struct: Arguments) {
             if args_struct.debug {
                 println!("{}\n{} - {} ({})\n", title, artist, album, date);
             } else {
+                let state = if parser::is_tagged(&remote) {
+                    format!("{} - {} ({})", artist, album, date)
+                } else {
+                    String::new()
+                };
+
                 client
                     .set_activity(|activity| {
-                        activity
-                            .state(format!("{} - {} ({})", artist, album, date))
-                            .details(title)
-                            .assets(|asset| {
-                                asset
-                                    .large_image("icon")
-                                    .large_text(format!("version {}", VERSION))
-                            })
+                        activity.state(state).details(title).assets(|asset| {
+                            asset
+                                .large_image("icon")
+                                .large_text(format!("version {}", VERSION))
+                        })
                     })
                     .expect("Failed to set activity");
             }
