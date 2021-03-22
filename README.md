@@ -25,6 +25,12 @@ Options:
 ```-i```, ```--interval <interval>``` Polling interval in which the program grabs current status, in milliseconds.
                                       [default: 1000]
 
+```-b```, ```--bottom <format>```     Sets custom formatting for the bottom string
+                                      [default: "{artist} - {album} ({date})"]
+                                      
+```-t```, ```--top <format>```        Sets custom formatting for the top string
+                                      [default: "{title}"]
+
 ## Building
 You know how it goes.
 
