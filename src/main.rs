@@ -1,5 +1,4 @@
-use std::fmt::Debug;
-use std::{thread::sleep, time::Duration};
+use std::{fmt::Debug, thread::sleep, time::Duration};
 
 use discord_rpc_client::Client;
 use structopt::StructOpt;
@@ -9,7 +8,6 @@ use parser::Tag;
 mod parser;
 mod shell;
 
-// TODO: add support for custom format strings in rp display
 #[derive(Debug, StructOpt)]
 struct Arguments {
     #[structopt(
@@ -88,7 +86,7 @@ fn main_loop(mut client: Client, args_struct: Arguments) {
     }
 }
 
-fn replace_format(format_string: &str, remote: &String) -> String {
+fn replace_format(format_string: &str, remote: &str) -> String {
     format_string
         .replace("{artist}", get_tag(Tag::Artist, &remote).as_str())
         .replace("{title}", get_tag(Tag::Title, &remote).as_str())
@@ -97,6 +95,6 @@ fn replace_format(format_string: &str, remote: &String) -> String {
 }
 
 // basically just to get rid of repeated unwrapping in main method
-fn get_tag(tag: Tag, remote: &String) -> String {
+fn get_tag(tag: Tag, remote: &str) -> String {
     Tag::parse_tag(tag, remote).unwrap_or(String::new())
 }

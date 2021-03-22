@@ -1,5 +1,7 @@
-use core::fmt;
-use std::fmt::{Display, Formatter};
+use std::{
+    fmt,
+    fmt::{Display, Formatter},
+};
 
 pub enum Tag {
     Title,
@@ -29,24 +31,26 @@ impl Tag {
         let tag_formatted = format!("tag {} ", tag.to_string());
 
         if is_tagged(remote) {
-            let result: String = remote
-                .lines()
-                .filter(|line| line.starts_with(tag_formatted.as_str()))
-                .take(1)
-                .collect();
+            return Some(
+                remote
+                    .lines()
+                    .filter(|line| line.starts_with(tag_formatted.as_str()))
+                    .take(1)
+                    .collect::<String>()[tag_formatted.len()..]
+                    .to_string(),
+            );
+        }
 
-            return Some(result[tag_formatted.len()..].to_string());
-        } else {
-            if tag.to_string().eq("title") {
-                // return only the title tag based on file name
-                let line: String = remote
+        if tag.to_string().eq("title") {
+            // return only the title tag based on file name
+            return Some(
+                remote
                     .lines()
                     .filter(|line| line.starts_with("file "))
                     .take(1)
-                    .collect();
-
-                return Some(line[5..].to_string());
-            }
+                    .collect::<String>()[5..]
+                    .to_string(),
+            );
         }
 
         None

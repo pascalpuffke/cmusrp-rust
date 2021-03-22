@@ -4,11 +4,9 @@ version = "1.2.0"
 authors = ["Pascal Puffke <pascal@pascalpuffke.de>"]
 edition = "2018"
 license = "GPL-3.0-or-later"
-license-file = "LICENSE"
 repository = "https://github.com/MineClashTV/cmusrp-rust"
 categories = ["command-line-utilities"]
 
 [dependencies]
 discord-rpc-client = "0.3.0"
-clap = "2.33.3"
 structopt = "0.3.21"
