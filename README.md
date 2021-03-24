@@ -34,5 +34,8 @@ Options:
 ## Building
 You know how it goes.
 
-1. ```cargo build``` compiles this program into an executable located in ./target/release/crp-rust
-2. ```cargo install --path .``` installs this program to ~/.cargo/bin/crp-rust
+If you want to build and copy the binary to ```/usr/bin```, you may use the following command:
+
+```cargo build --release && sudo cp ./target/release/crp-rust /usr/bin/```
+
+After executing, you can easily use the program just by typing ```crp-rust``` in a terminal or shell script, assuming ```/usr/bin``` is in your PATH (which should be the case)
