@@ -40,7 +40,6 @@ struct Arguments {
 }
 
 const ID: u64 = 718109162923360327;
-const VERSION: &str = "1.2.0";
 
 fn main() {
     let args = Arguments::from_args();
@@ -55,6 +54,8 @@ fn main() {
 }
 
 fn main_loop(mut client: Client, args_struct: Arguments) {
+    let version = option_env!("CARGO_PKG_VERSION").unwrap_or("unknown");
+
     loop {
         let remote = shell::get_stdout("cmus-remote", "-Q").unwrap_or(String::new());
 
@@ -72,7 +73,7 @@ fn main_loop(mut client: Client, args_struct: Arguments) {
                         activity.state(bottom).details(top).assets(|asset| {
                             asset
                                 .large_image("icon")
-                                .large_text(format!("version {}", VERSION))
+                                .large_text(format!("version {}", version))
                         })
                     })
                     .expect("Failed to set activity");
