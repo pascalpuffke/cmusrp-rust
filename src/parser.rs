@@ -34,7 +34,7 @@ impl Tag {
             return Some(
                 remote
                     .lines()
-                    .filter(|line| line.starts_with(tag_formatted.as_str()))
+                    .filter(|line| line.starts_with(&tag_formatted))
                     .take(1)
                     .collect::<String>()[tag_formatted.len()..]
                     .to_string(),
@@ -59,6 +59,9 @@ impl Tag {
 
 pub fn is_tagged(remote: &str) -> bool {
     remote.contains("tag title")
+        && remote.contains("tag artist")
+        && remote.contains("tag album")
+        && remote.contains("tag date")
 }
 
 pub fn is_playing(remote: &str) -> bool {

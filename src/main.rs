@@ -54,7 +54,10 @@ fn main() {
 }
 
 fn main_loop(mut client: Client, args_struct: Arguments) {
-    let version = option_env!("CARGO_PKG_VERSION").unwrap_or("unknown");
+    let version = format!(
+        "version {}",
+        option_env!("CARGO_PKG_VERSION").unwrap_or("unknown")
+    );
 
     loop {
         let remote = shell::get_stdout("cmus-remote", "-Q").unwrap_or(String::new());
@@ -70,11 +73,10 @@ fn main_loop(mut client: Client, args_struct: Arguments) {
             } else {
                 client
                     .set_activity(|activity| {
-                        activity.state(bottom).details(top).assets(|asset| {
-                            asset
-                                .large_image("icon")
-                                .large_text(format!("version {}", version))
-                        })
+                        activity
+                            .state(bottom)
+                            .details(top)
+                            .assets(|asset| asset.large_image("icon").large_text(&version))
                     })
                     .expect("Failed to set activity");
             }
